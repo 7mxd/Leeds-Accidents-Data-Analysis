@@ -33,7 +33,7 @@ Accidents_2017 <- Accidents_2017[,c(1:4,14,15,5:13)]
 str(Accidents_2017)
 ```
 
-We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examples of continuous and categorical variables, respectively), and we have times and dates in the `Accidents_Date` and 'Time` variables.This satisfies the data requirements for the MATH 214 project.
+We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examples of continuous and categorical variables, respectively), and we have times and dates in the `Accidents_Date` and `Time` variables. This satisfies the data requirements for the MATH 214 project.
 
 # Description 
 The dataset shows information on road accidents across Leeds during the year 2017.
