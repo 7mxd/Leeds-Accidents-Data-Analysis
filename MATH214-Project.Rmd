@@ -7,7 +7,33 @@ output: html_document
 
 ```{r}
 library(nycflights13)
+library(tidyverse)
+```
+
+# Task 1
+
+```{r}
+dt <-read_csv("https://query.data.world/s/khxg26i5c7sq4477phll42xsfdmsxx",col_names = c("Reference Number","Easting","Northing","Number","date","time","Class","Surface","Lightning","Weather","Type","Casualty Class","Severity","Gender","Age"),skip = 1)
+dt
 
 ```
 
+```{r}
+d2 <- as_tibble(dt)
+d2
+```
+
+```{r}
+ Accident_Date <- d2$date
+ Accident_Time <- d2$time
+Date <- parse_date(Accident_Date,"%m/%d/%Y")
+Time <- parse_time(Accident_Time,"%H%M")
+
+```
+
+```{r}
+dt3 <- mutate(d2,Date,Time) 
+New_dt<- select(dt3,-(date:time))
+New_dt
+```
 
