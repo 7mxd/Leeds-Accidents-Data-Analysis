@@ -1,39 +1,61 @@
 ---
-title: "test3"
+title: "Road accidents data analysis"
 author: "Ahmed A. Radhi, Khalid Talal Suliman"
 date: "3/13/2021"
 output: html_document
 ---
 
 ```{r}
-library(nycflights13)
 library(tidyverse)
 ```
 
 # Task 1
 
 ```{r}
-dt <-read_csv("https://query.data.world/s/khxg26i5c7sq4477phll42xsfdmsxx",col_names = c("Reference Number","Easting","Northing","Number","date","time","Class","Surface","Lightning","Weather","Type","Casualty Class","Severity","Gender","Age"),skip = 1)
-dt
+# Loading the data into R 
+Accidents_2017 <- read_csv("Data/datagov-uk-6efe5505-941f-45bf-b576-4c1e09b579a1/2017-8.csv", 
+col_names = c("Reference_Number","Easting","Northing","Vehicles_Num","Accident_Date","Time","Road_Class","Road_Surface",
+              "Lightning_Cond","Weather_Cond","Vehicle_Type","Casualty_Class","Severity","Gender","Age"), skip = 1)
 
+# Parsing the data
+Accidents_Date <- Accidents_2017$Accident_Date
+Accidents_Date <- parse_date(Accidents_Date, "%m/%d/%Y")
+
+Time <- Accidents_2017$Time
+Time <- parse_time(Time, "%H%M")
+
+# Adding the new columns to the tibble.
+Accidents_2017 <- Accidents_2017 %>%
+  select(1:4, 7:15) %>%
+  mutate(Accidents_Date, Time) 
+
+Accidents_2017 <- Accidents_2017[,c(1:4,14,15,5:13)]
+str(Accidents_2017)
 ```
 
-```{r}
-d2 <- as_tibble(dt)
-d2
-```
+We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examples of continuous and categorical variables, respectively), and we have times and dates in the `Accidents_Date` and 'Time` variables.This satisfies the data requirements for the MATH 214 project.
 
-```{r}
- Accident_Date <- d2$date
- Accident_Time <- d2$time
-Date <- parse_date(Accident_Date,"%m/%d/%Y")
-Time <- parse_time(Accident_Time,"%H%M")
+# Description 
+The dataset shows information on road accidents across Leeds during the year 2017.
 
-```
+ Reference_Number : Reference number of the accident
+ Easting          : X-coordinate of the location of the accident                         using grid coordinates
+ Northing         : Y-coordinate of the location of the accident                         using grid coordinates
+ Vehicles_Num     : Number of vehicles involved in the accident
+ Accident_Date    : Date of the accident 
+ Time             : Time of the accident
+ Road_Class       : Class of road on which the accident happened
+ Road_Surface     : Surface of the road during the accident
+ Lightning_Cond   : Light conditions during the accident
+ Weather_Cond     : Weather conditions during the accident 
+ Vehicle_Type     : Type of vehicle that caused the accident
+ Casualty_Class   : Class of the casualty
+ Severity         : Degree of severity of the accident
+ Gender           : Gender of the driver
+ Age              : Age of the driver 
 
-```{r}
-dt3 <- mutate(d2,Date,Time) 
-New_dt<- select(dt3,-(date:time))
-New_dt
-```
+# Reference 
+https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
+
+# Task 2
 
