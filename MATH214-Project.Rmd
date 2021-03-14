@@ -35,26 +35,40 @@ str(Accidents_2017)
 
 We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examples of continuous and categorical variables, respectively), and we have times and dates in the `Accidents_Date` and `Time` variables. This satisfies the data requirements for the MATH 214 project.
 
-# Description 
+## Description 
 The dataset shows information on road accidents across Leeds during the year 2017.
 
  Reference_Number : Reference number of the accident
+ 
  Easting          : X-coordinate of the location of the accident                         using grid coordinates
+ 
  Northing         : Y-coordinate of the location of the accident                         using grid coordinates
+ 
  Vehicles_Num     : Number of vehicles involved in the accident
+ 
  Accident_Date    : Date of the accident 
+ 
  Time             : Time of the accident
+ 
  Road_Class       : Class of road on which the accident happened
+ 
  Road_Surface     : Surface of the road during the accident
+ 
  Lightning_Cond   : Light conditions during the accident
+ 
  Weather_Cond     : Weather conditions during the accident 
+ 
  Vehicle_Type     : Type of vehicle that caused the accident
+ 
  Casualty_Class   : Class of the casualty
+ 
  Severity         : Degree of severity of the accident
+ 
  Gender           : Gender of the driver
+ 
  Age              : Age of the driver 
 
-# Reference 
+## Reference 
 https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 
 # Task 2
