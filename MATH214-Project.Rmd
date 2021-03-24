@@ -30,8 +30,13 @@ Accidents_2017 <- Accidents_2017 %>%
   mutate(Accidents_Date, Time) 
 
 Accidents_2017 <- Accidents_2017[,c(1:4,14,15,5:13)]
+
+```
+
+```{r}
 str(Accidents_2017)
 ```
+
 
 We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examples of continuous and categorical variables, respectively), and we have times and dates in the `Accidents_Date` and `Time` variables. This satisfies the data requirements for the MATH 214 project.
 
@@ -72,4 +77,38 @@ The dataset shows information on road accidents across Leeds during the year 201
 https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 
 # Task 2
+
+```{r}
+# Variance 
+
+ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
+  geom_histogram(binwidth = 1,fill="black", color = "white") 
+```
+
+```{r}
+# Variance
+
+ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
+  geom_bar(fill = "black" , width = 0.5)
+```
+
+```{r}
+Accidents_2017 %>%
+  group_by(Age) %>%
+  summarise(count = n())
+```
+
+```{r}
+Accidents_2017 %>%
+  group_by(Gender) %>%
+  summarise(count = n())
+```
+
+```{r}
+Accidents_2017 %>%
+  group_by(Accidents_Date) %>%
+  summarise(count = n())
+```
+
+
 
