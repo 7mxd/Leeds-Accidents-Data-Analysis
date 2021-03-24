@@ -79,14 +79,14 @@ https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 # Task 2
 
 ```{r}
-# Variance 
+# Variance (Age)
 
 ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
   geom_histogram(binwidth = 1,fill="black", color = "white") 
 ```
 
 ```{r}
-# Variance
+# Variance (Gender)
 
 ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
   geom_bar(fill = "black" , width = 0.5)
@@ -110,5 +110,42 @@ Accidents_2017 %>%
   summarise(count = n())
 ```
 
+```{r}
+# Variance (Road Surface)
+ggplot(data = Accidents_2017) +
+  geom_bar(mapping = aes(x = Road_Surface))
+```
+
+Most accidents happen when the road is dry which is expected as drivers take more care when the road is bad. It is important to note that when the road is snowy, the number of accidents is extremely low compared to other settings(only 5 accidents).
+
+```{r}
+Accidents_2017 %>%
+  group_by(Road_Surface) %>%
+  summarise(count = n())
+```
 
 
+```{r}
+# Covariance (Time and Severity)
+ggplot(data = Accidents_2017)+ 
+  geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()
+```
+
+
+
+```{r}
+# Covariance(Age and Severity)
+ggplot(data = Accidents_2017)+ 
+  geom_boxplot(mapping = aes(x = reorder(Severity, Age, FUN = median), y = Age))+ coord_flip()
+```
+
+Fatal accidents tend to happen to people under the age of 25 more frequently.Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
+
+
+
+# Questions
+
+1. What are the worst conditions to drive in ?
+2. What season has the most accidents ?
+3. What is the worst time to drive at ?
+4. 
