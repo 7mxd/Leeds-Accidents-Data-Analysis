@@ -6,7 +6,16 @@ output: html_document
 ---
 
 ```{r}
+
+packages <- c("tidyverse", "leaflet","sf")
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
 library(tidyverse)
+library(leaflet)
+library(sf)
 ```
 
 # Task 1
@@ -86,6 +95,11 @@ https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 
 ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
   geom_histogram(binwidth = 1,fill="black", color = "white") 
+
+Accidents_2017 %>%
+  group_by(Age) %>%
+  summarise(count = n())
+
 ```
 
 ```{r}
@@ -93,25 +107,61 @@ ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
 
 ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
   geom_bar(fill = "black" , width = 0.5)
-```
 
-```{r}
-Accidents_2017 %>%
-  group_by(Age) %>%
-  summarise(count = n())
-```
-
-```{r}
 Accidents_2017 %>%
   group_by(Gender) %>%
   summarise(count = n())
 ```
 
+
 ```{r}
+# Variance (Number of Accidents Per Month)
+
 Accidents_2017 %>%
   group_by(Accidents_Date) %>%
-  summarise(count = n())
+  summarise(sum = n())
+
+( Accidents_by_month <- 
+    Accidents_2017 %>%
+    mutate(month = format(Accidents_Date,"%m")) %>%
+    group_by(month) %>%
+    summarise(accidents_num = n())
+)
+
+ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
+  geom_point(aes(color = month),size = 3 , show.legend = F)
+
 ```
+
+
+```{r}
+
+# Covariance (Age/Gender against Count)
+
+Accidents_2017 %>%
+  group_by(Gender, Age) %>%
+  summarise(count = n() ) %>%
+  ungroup() %>%
+  ggplot(mapping = aes(x=Age , y = count)) +
+  geom_boxplot(aes(color = Gender))
+
+```
+
+
+
+```{r}
+long_lat <- Accidents_2017 %>%
+  st_as_sf(coords = c("Easting", "Northing"), crs = 27700) %>%
+  st_transform(4326) %>%
+  st_coordinates() %>%
+  as_tibble()
+
+leaflet(data = long_lat)%>%
+  addTiles() %>%
+  addMarkers(lng = ~X, lat = ~Y)
+             
+```
+
 
 ```{r}
 # Variance (Road Surface)
