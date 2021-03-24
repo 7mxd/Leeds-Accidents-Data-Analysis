@@ -43,35 +43,38 @@ We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examp
 ## Description 
 The dataset shows information on road accidents across Leeds during the year 2017.
 
- Reference_Number : Reference number of the accident
+ Reference_Number : Reference number of the accident (character)
  
- Easting          : X-coordinate of the location of the accident                         using grid coordinates
+ Easting          : X-coordinate of the location of the accident                         using grid coordinates (double)
  
- Northing         : Y-coordinate of the location of the accident                         using grid coordinates
+ Northing         : Y-coordinate of the location of the accident                         using grid coordinates (double)
  
- Vehicles_Num     : Number of vehicles involved in the accident
+ Vehicles_Num     : Number of vehicles involved in the accident                          (double)
  
- Accident_Date    : Date of the accident 
+ Accident_Date    : Date of the accident (character)
  
- Time             : Time of the accident
+ Time             : Time of the accident (double)
  
- Road_Class       : Class of road on which the accident happened
+ Road_Class       : Class of road on which the accident happened                         (character)
  
- Road_Surface     : Surface of the road during the accident
+ Road_Surface     : Surface of the road during the accident                              (character)
  
  Lightning_Cond   : Light conditions during the accident
- 
+                     (character)
+                     
  Weather_Cond     : Weather conditions during the accident 
- 
+                     (character)
+                     
  Vehicle_Type     : Type of vehicle that caused the accident
+                     (character)
+                     
+ Casualty_Class   : Class of the casualty (character)
  
- Casualty_Class   : Class of the casualty
+ Severity         : Degree of severity of the accident (character)
  
- Severity         : Degree of severity of the accident
+ Gender           : Gender of the driver (character)
  
- Gender           : Gender of the driver
- 
- Age              : Age of the driver 
+ Age              : Age of the driver (double)
 
 ## Reference 
 https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
@@ -124,13 +127,21 @@ Accidents_2017 %>%
   summarise(count = n())
 ```
 
+```{r}
+# Variance (Casualty_Class )
+Accidents_2017 %>%
+  group_by(Casualty_Class) %>%
+  summarise(count = n())
+
+```
+
 
 ```{r}
 # Covariance (Time and Severity)
 ggplot(data = Accidents_2017)+ 
   geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()
 ```
-
+Most serious and slight accidents happen between 10 am and 17.30 pm. While most fatal accidents occur between 16 pm and 22 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter=quartile range.   
 
 
 ```{r}
@@ -141,6 +152,12 @@ ggplot(data = Accidents_2017)+
 
 Fatal accidents tend to happen to people under the age of 25 more frequently.Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
 
+```{r}
+Accidents_2017 %>%
+  group_by(Severity) %>%
+  summarise(count = n())
+
+```
 
 
 # Questions
@@ -148,4 +165,7 @@ Fatal accidents tend to happen to people under the age of 25 more frequently.Sli
 1. What are the worst conditions to drive in ?
 2. What season has the most accidents ?
 3. What is the worst time to drive at ?
-4. 
+4. Which area in Leeds has the most accidents ?
+5. Which roads are the most dangerous ?
+
+
