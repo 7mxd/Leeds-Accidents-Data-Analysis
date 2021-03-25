@@ -129,7 +129,7 @@ Accidents_2017 %>%
 )
 
 ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
-  geom_point(aes(color = month),size = 3 , show.legend = F)
+  geom_bar(fill = "#4267B3" , show.legend = F, stat = "identity")
 
 ```
 
