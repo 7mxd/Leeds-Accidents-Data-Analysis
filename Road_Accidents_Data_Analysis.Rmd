@@ -150,17 +150,30 @@ Accidents_2017 %>%
 
 
 ```{r}
+
 long_lat <- Accidents_2017 %>%
   st_as_sf(coords = c("Easting", "Northing"), crs = 27700) %>%
   st_transform(4326) %>%
   st_coordinates() %>%
   as_tibble()
 
-leaflet(data = long_lat)%>%
+long_lat_FULL <- Accidents_2017 %>%
+  mutate(long_lat)  %>%
+  select(Reference_Number, X, Y, Severity)
+  
+pal <- colorFactor(c("yellow", "orange", "red"), domain = c("Slight", "Serious", "Fatal"))
+                   
+leaflet(data = long_lat_FULL)%>%
   addTiles() %>%
-  addMarkers(lng = ~X, lat = ~Y)
+  addCircleMarkers(lng = ~X, lat = ~Y, 
+                   color = ~pal(Severity),
+                   stroke = F, fillOpacity = 0.75,
+                   clusterOptions = markerClusterOptions())  %>%
+  addLegend(colors = c("yellow", "orange", "red") , labels = c("Slight", "Serious", "Fatal"))
+  
              
 ```
+
 
 
 ```{r}
