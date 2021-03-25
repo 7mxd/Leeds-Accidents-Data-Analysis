@@ -129,7 +129,7 @@ Accidents_2017 %>%
 )
 
 ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
-  geom_bar(fill = "#4267B3" , show.legend = F, stat = "identity")
+  geom_bar(aes(fill = month) , show.legend = F, stat = "identity")
 
 ```
 
@@ -207,6 +207,7 @@ ggplot(data = Accidents_2017)+
 ylab("Severity")+
   xlab("Time")
 ```
+
 Most serious and slight accidents happen between 10 am and 17.30 pm. While most fatal accidents occur between 16 pm and 22 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter=quartile range.   
 
 
@@ -242,6 +243,9 @@ geom_histogram(binwidth = 2000)+
 ylab("Number of Accidents")+
   xlab("Time")
 ```
+
+
+
 The number of accidents that happen between 12 am and 7 am are low.
 Generally, after 7 am as the time increases the number of accidents increase till 6 pm. After 6 pm the number of accidents decrease. There are 2 low drops which might represent something. 
 
