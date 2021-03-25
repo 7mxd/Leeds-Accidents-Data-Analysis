@@ -189,7 +189,10 @@ Accidents_2017 %>%
 ```{r}
 # Covariance (Time and Severity)
 ggplot(data = Accidents_2017)+ 
-  geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()
+  geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()+
+  ggtitle("Severity against Time")+
+ylab("Severity")+
+  xlab("Time")
 ```
 Most serious and slight accidents happen between 10 am and 17.30 pm. While most fatal accidents occur between 16 pm and 22 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter=quartile range.   
 
@@ -197,7 +200,10 @@ Most serious and slight accidents happen between 10 am and 17.30 pm. While most 
 ```{r}
 # Covariance(Age and Severity)
 ggplot(data = Accidents_2017)+ 
-  geom_boxplot(mapping = aes(x = reorder(Severity, Age, FUN = median), y = Age))+ coord_flip()
+  geom_boxplot(mapping = aes(x = reorder(Severity, Age, FUN = median), y = Age))+ coord_flip()+
+  ggtitle("Severity against Age")+
+ylab("Age")+
+  xlab("Severity")
 ```
 
 Fatal accidents tend to happen to people under the age of 25 more frequently.Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
@@ -209,6 +215,22 @@ Accidents_2017 %>%
 
 ```
 
+```{r}
+Accidents_2017 %>%
+  group_by(Weather_Cond) %>%
+  summarise(count = n())
+```
+
+```{r}
+# Variance (Time)
+ggplot(Accidents_2017,mapping=aes(x=Time))+
+geom_histogram(binwidth = 2000)+
+  ggtitle("Accidents against Time")+
+ylab("Number of Accidents")+
+  xlab("Time")
+```
+The number of accidents that happen between 12 am and 7 am are low.
+Generally, after 7 am as the time increases the number of accidents increase till 6 pm. After 6 pm the number of accidents decrease. There are 2 low drops which might represent something. 
 
 # Questions
 
