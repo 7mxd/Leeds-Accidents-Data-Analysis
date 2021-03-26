@@ -90,11 +90,15 @@ https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 
 # Task 2
 
+## Variance
+
 ```{r}
 # Variance (Age)
 
 ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
-  geom_histogram(binwidth = 1,fill="black", color = "white") 
+  geom_histogram(binwidth = 1,fill="black", color = "white") +
+  ggtitle("Number of Casualties Based on Age") + 
+  ylab("Number of Casualties")
 
 Accidents_2017 %>%
   group_by(Age) %>%
@@ -106,20 +110,25 @@ Accidents_2017 %>%
 # Variance (Gender)
 
 ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
-  geom_bar(fill = "black" , width = 0.5)
+  geom_bar(fill = "black" , width = 0.5) +
+  ggtitle("Number of Casualties Based on Gender") + 
+  ylab("Number of Casualties")
 
 Accidents_2017 %>%
   group_by(Gender) %>%
   summarise(count = n())
 ```
 
-
 ```{r}
 # Variance (Number of Accidents Per Month)
+
+# Accidents per day
 
 Accidents_2017 %>%
   group_by(Accidents_Date) %>%
   summarise(sum = n())
+
+# Accidents per month
 
 ( Accidents_by_month <- 
     Accidents_2017 %>%
@@ -128,53 +137,14 @@ Accidents_2017 %>%
     summarise(accidents_num = n())
 )
 
+# Plot of Accidents per month
 ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
-  geom_bar(aes(fill = month) , show.legend = F, stat = "identity")
+  geom_bar(aes(fill = month) , show.legend = F, stat = "identity") +
+  ggtitle("Number of Accidents Per Month") +
+  xlab("Month") +
+  ylab("Number of Accidents")
 
 ```
-
-
-```{r}
-
-# Covariance (Age/Gender against Count)
-
-Accidents_2017 %>%
-  group_by(Gender, Age) %>%
-  summarise(count = n() ) %>%
-  ungroup() %>%
-  ggplot(mapping = aes(x=Age , y = count)) +
-  geom_boxplot(aes(color = Gender))
-
-```
-
-
-
-```{r}
-
-long_lat <- Accidents_2017 %>%
-  st_as_sf(coords = c("Easting", "Northing"), crs = 27700) %>%
-  st_transform(4326) %>%
-  st_coordinates() %>%
-  as_tibble()
-
-long_lat_FULL <- Accidents_2017 %>%
-  mutate(long_lat)  %>%
-  select(Reference_Number, X, Y, Severity)
-  
-pal <- colorFactor(c("yellow", "orange", "red"), domain = c("Slight", "Serious", "Fatal"))
-                   
-leaflet(data = long_lat_FULL)%>%
-  addTiles() %>%
-  addCircleMarkers(lng = ~X, lat = ~Y, 
-                   color = ~pal(Severity),
-                   stroke = F, fillOpacity = 0.75,
-                   clusterOptions = markerClusterOptions())  %>%
-  addLegend(colors = c("yellow", "orange", "red") , labels = c("Slight", "Serious", "Fatal"))
-  
-             
-```
-
-
 
 ```{r}
 # Variance (Road Surface)
@@ -200,23 +170,46 @@ Accidents_2017 %>%
 
 
 ```{r}
+# Variance (Time)
+ggplot(Accidents_2017,mapping=aes(x=Time))+
+  geom_histogram(binwidth = 2000)+
+  ggtitle("Accidents against Time")+
+  ylab("Number of Accidents")+
+  xlab("Time")
+```
+
+## Covariance
+
+```{r}
+
+# Covariance (Age/Gender against Count)
+
+Accidents_2017 %>%
+  group_by(Gender, Age) %>%
+  summarise(Count = n() ) %>%
+  ungroup() %>%
+  ggplot(mapping = aes(x=Age , y = Count)) +
+  geom_boxplot(aes(color = Gender))
+
+```
+
+```{r}
 # Covariance (Time and Severity)
 ggplot(data = Accidents_2017)+ 
   geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()+
   ggtitle("Severity against Time")+
-ylab("Severity")+
+  ylab("Severity")+
   xlab("Time")
 ```
 
 Most serious and slight accidents happen between 10 am and 17.30 pm. While most fatal accidents occur between 16 pm and 22 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter=quartile range.   
-
 
 ```{r}
 # Covariance(Age and Severity)
 ggplot(data = Accidents_2017)+ 
   geom_boxplot(mapping = aes(x = reorder(Severity, Age, FUN = median), y = Age))+ coord_flip()+
   ggtitle("Severity against Age")+
-ylab("Age")+
+  ylab("Age")+
   xlab("Severity")
 ```
 
@@ -229,25 +222,46 @@ Accidents_2017 %>%
 
 ```
 
+The number of accidents that happen between 12 am and 7 am are low.
+
+Generally, after 7 am as the time increases the number of accidents increase till 6 pm. After 6 pm the number of accidents decrease. There are 2 low drops which might represent something. 
+
 ```{r}
 Accidents_2017 %>%
   group_by(Weather_Cond) %>%
   summarise(count = n())
 ```
 
+## Extra Plot: 
+
+### Locations of the Accidents
+
 ```{r}
-# Variance (Time)
-ggplot(Accidents_2017,mapping=aes(x=Time))+
-geom_histogram(binwidth = 2000)+
-  ggtitle("Accidents against Time")+
-ylab("Number of Accidents")+
-  xlab("Time")
+
+long_lat <- Accidents_2017 %>%
+  st_as_sf(coords = c("Easting", "Northing"), crs = 27700) %>%
+  st_transform(4326) %>%
+  st_coordinates() %>%
+  as_tibble()
+
+long_lat_FULL <- Accidents_2017 %>%
+  mutate(long_lat)  %>%
+  select(Reference_Number, X, Y, Severity)
+  
+pal <- colorFactor(c("yellow", "orange", "red"), domain = c("Slight", "Serious", "Fatal"))
+
+leaflet(data = long_lat_FULL)%>%
+  addTiles() %>%
+  addCircleMarkers(lng = ~X, lat = ~Y, 
+                   color = ~pal(Severity),
+                   stroke = F, fillOpacity = 0.75,
+                   clusterOptions = markerClusterOptions())  %>%
+  addLegend(colors = c("yellow", "orange", "red") , labels = c("Slight", "Serious", "Fatal"), title = "Severity")
+
+             
 ```
 
 
-
-The number of accidents that happen between 12 am and 7 am are low.
-Generally, after 7 am as the time increases the number of accidents increase till 6 pm. After 6 pm the number of accidents decrease. There are 2 low drops which might represent something. 
 
 # Questions
 
