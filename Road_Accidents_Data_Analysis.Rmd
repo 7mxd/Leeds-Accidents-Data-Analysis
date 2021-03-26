@@ -106,11 +106,14 @@ Accidents_2017 %>%
 
 ```
 
+As the age increase,the number of casualties increases until the age 26. After the age 26 , as the age increase the number of casualties decreases. This was expected as older drivers are more experienced than younger ones. It is a important to note that there is a big jump in the number of casualties from age 17 to 18.
+
+
 ```{r}
 # Variance (Gender)
 
 ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
-  geom_bar(fill = "black" , width = 0.5) +
+  geom_bar(aes(fill = Gender) , width = 0.5) +
   ggtitle("Number of Casualties Based on Gender") + 
   ylab("Number of Casualties")
 
@@ -118,6 +121,8 @@ Accidents_2017 %>%
   group_by(Gender) %>%
   summarise(count = n())
 ```
+
+Males have a higher tendency to cause accidents.The ratio between males and females in accidents is slightly above 1.3.
 
 ```{r}
 # Variance (Number of Accidents Per Month)
@@ -146,27 +151,21 @@ ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
 
 ```
 
+Throughout the year, there were at least 150 accidents every month. February was the month with the least number of accidents, a reason for this is February 2017 had only 28 days. On the other hand, November had the most accidents (234). Towards the end of the year in Leeds the number of accidents increase.
+
+
 ```{r}
 # Variance (Road Surface)
 ggplot(data = Accidents_2017) +
-  geom_bar(mapping = aes(x = Road_Surface))
-```
+  geom_bar(mapping = aes(x = Road_Surface,fill = Road_Surface))
 
-Most accidents happen when the road is dry which is expected as drivers take more care when the road is bad. It is important to note that when the road is snowy, the number of accidents is extremely low compared to other settings(only 5 accidents).
-
-```{r}
 Accidents_2017 %>%
   group_by(Road_Surface) %>%
   summarise(count = n())
 ```
 
-```{r}
-# Variance (Casualty_Class )
-Accidents_2017 %>%
-  group_by(Casualty_Class) %>%
-  summarise(count = n())
+Most accidents happen when the road is dry which is expected as drivers take more care when the road is bad. On average, Leeds has 175.4 rainfall days and 10.6 snowfalls days per year so for the remaining days the road is dry. Thus number of accidents per day for each climate is 2.97 when it is raining, 3.3 when it is snowing and 9.2 when the climate is dry. The number of accidents per day when the weather is dry is extremely highly and shows how careless Leeds' drivers are the road surface is dry.
 
-```
 
 
 ```{r}
@@ -176,7 +175,10 @@ ggplot(Accidents_2017,mapping=aes(x=Time))+
   ggtitle("Accidents against Time")+
   ylab("Number of Accidents")+
   xlab("Time")
+
 ```
+
+From 12 am till 6 am the number of accidents is remarkably low. After 6 am the number of accidents keeps increasing till 5.30 pm. After that the number of accidents keep decreasing. It is noteworthy to mention that there are 2 big drops in the number of accidents which  could represent something. 
 
 ## Covariance
 
@@ -190,6 +192,10 @@ Accidents_2017 %>%
   ungroup() %>%
   ggplot(mapping = aes(x=Age , y = Count)) +
   geom_boxplot(aes(color = Gender))
+
+Accidents_2017 %>%
+  group_by(Gender, Age) %>%
+  summarise(Count = n() )
 
 ```
 
