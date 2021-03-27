@@ -1,5 +1,5 @@
 ---
-title: "Road accidents data analysis"
+title: "Leeds Accidents Analysis"
 author: "Ahmed A. Radhi, Khalid Talal Suliman"
 date: "3/13/2021"
 output: html_document
@@ -52,38 +52,38 @@ We have 2,203 observations, 15 variables (with `Age` and `Road_Surface` as examp
 ## Description 
 The dataset shows information on road accidents across Leeds during the year 2017.
 
- Reference_Number : Reference number of the accident (character)
+ `Reference_Number` : Reference number of the accident (character)
  
- Easting          : X-coordinate of the location of the accident                         using grid coordinates (double)
+ `Easting`          : X-coordinate of the location of the accident                         using grid coordinates (double)
  
- Northing         : Y-coordinate of the location of the accident                         using grid coordinates (double)
+ `Northing`         : Y-coordinate of the location of the accident                         using grid coordinates (double)
  
- Vehicles_Num     : Number of vehicles involved in the accident                          (double)
+ `Vehicles_Num`     : Number of vehicles involved in the accident                          (double)
  
- Accident_Date    : Date of the accident (character)
+ `Accident_Date`    : Date of the accident (character)
  
- Time             : Time of the accident (double)
+ `Time`             : Time of the accident (double)
  
- Road_Class       : Class of road on which the accident happened                         (character)
+ `Road_Class`       : Class of road on which the accident happened                         (character)
  
- Road_Surface     : Surface of the road during the accident                              (character)
+ `Road_Surface`     : Surface of the road during the accident                              (character)
  
- Lightning_Cond   : Light conditions during the accident
+ `Lightning_Cond`   : Light conditions during the accident
                      (character)
                      
- Weather_Cond     : Weather conditions during the accident 
+ `Weather_Cond`     : Weather conditions during the accident 
                      (character)
                      
- Vehicle_Type     : Type of vehicle that caused the accident
+ `Vehicle_Type`     : Type of vehicle that caused the accident
                      (character)
                      
- Casualty_Class   : Class of the casualty (character)
+ `Casualty_Class`   : Class of the casualty (character)
  
- Severity         : Degree of severity of the accident (character)
+ `Severity`         : Degree of severity of the accident (character)
  
- Gender           : Gender of the driver (character)
+ `Gender`           : Gender of the driver (character)
  
- Age              : Age of the driver (double)
+ `Age`              : Age of the driver (double)
 
 ## Reference 
 https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
@@ -270,19 +270,20 @@ long_lat <- Accidents_2017 %>%
 long_lat_FULL <- Accidents_2017 %>%
   mutate(long_lat)  %>%
   select(Reference_Number, X, Y, Severity)
-  
+
 pal <- colorFactor(c("yellow", "orange", "red"), domain = c("Slight", "Serious", "Fatal"))
 
 leaflet(data = long_lat_FULL)%>%
   addTiles() %>%
   addCircleMarkers(lng = ~X, lat = ~Y, 
                    color = ~pal(Severity),
-                   stroke = F, fillOpacity = 0.5,
+                   stroke = F, fillOpacity = 0.75,
                    clusterOptions = markerClusterOptions())  %>%
   addLegend(colors = c("yellow", "orange", "red") , labels = c("Slight", "Serious", "Fatal"), title = "Severity")
-
              
 ```
+ 
+#### The map divides the locations where the accidents took place into clusters, which helps knowing where the highest number of accidents took place. Also, the map classifies each accident on the map based on the severity. 
 
 # Questions
 
@@ -296,4 +297,5 @@ leaflet(data = long_lat_FULL)%>%
 8. Does the location or road influences the nature of an accident ?
 9. Why does the number of accidents increase towards the end of the year ?
 10. What do the 2 drops in the Accidents against Time graph represent ?
+11. Do accidents increase in the holidays ?
 
