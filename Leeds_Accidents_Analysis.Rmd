@@ -225,7 +225,7 @@ ggplot(data = Accidents_2017)+
   xlab("Severity")
 ```
 
-#### Fatal accidents tend to happen to people under the age of 25 more frequently.Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
+#### Fatal accidents tend to happen to people under the age of 25 more frequently. Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
 
 
 
