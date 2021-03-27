@@ -247,7 +247,7 @@ ggplot(data = Accidents_2017)+
 
 #### Fatal accidents tend to happen to people under the age of 25 more frequently. Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
 
-### 3. Covariance (Age against Count, Classified by Casualty Class)
+### 4. Covariance (Age against Count, Classified by Casualty Class)
 
 ```{r}
 
