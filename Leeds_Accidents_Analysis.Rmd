@@ -79,21 +79,36 @@ The dataset shows information on road accidents across Leeds during the year 201
                      
  `Casualty_Class`   : Class of the casualty (character)
  
- `Severity`         : Degree of severity of the accident (character)
+ `Severity`         : Degree of casualty severity (character)
  
- `Gender`           : Gender of the driver (character)
+ `Gender`           : Gender of the casualty (character)
  
- `Age`              : Age of the driver (double)
+ `Age`              : Age of the casualty (double)
 
 ## Reference 
 https://data.world/datagov-uk/6efe5505-941f-45bf-b576-4c1e09b579a1
 
 # Task 2
 
+## Questions
+
+1. What are the worst conditions to drive in ?
+2. What season has the most accidents ?
+3. What is the worst time to drive at ?
+4. Which area in Leeds has the most accidents ?
+5. Which roads are the most dangerous ?
+6. What are the age distributions for the casualty classes ?
+7. What characteristics increase the possibility of an accident ?
+8. Does the location or road influences the nature of an accident ?
+9. Why does the number of accidents increase towards the end of the year ?
+10. What do the 2 drops in the Accidents against Time graph represent ?
+11. Do accidents increase in the holidays ?
+
 ## Variance
 
+### 1. Variance (Age)
+
 ```{r}
-# Variance (Age)
 
 ggplot(data = Accidents_2017, mapping= aes(x=Age)) +
   geom_histogram(binwidth = 1,fill="black", color = "white") +
@@ -106,10 +121,11 @@ Accidents_2017 %>%
 
 ```
 
-#### As the age increase,the number of casualties increases until the age 26. After the age 26 , as the age increase the number of casualties decreases. This was expected as older drivers are more experienced than younger ones. It is a important to note that there is a big jump in the number of casualties from age 17 to 18.  
+#### As the age increase, the number of casualties increases until the age 26. After the age 26 , as the age increases the number of casualties decreases. This was expected as older drivers are more experienced than younger ones. It is important to note that there is a big jump in the number of casualties from age 17 to 18.  
+
+### 2. Variance (Gender)
 
 ```{r}
-# Variance (Gender)
 
 ggplot(data = Accidents_2017, mapping = aes(x=Gender)) + 
   geom_bar(aes(fill = Gender) , width = 0.5) +
@@ -121,10 +137,11 @@ Accidents_2017 %>%
   summarise(count = n())
 ```
 
-#### Males have a higher tendency to cause accidents.The ratio between males and females in accidents is slightly above 1.3.
+#### Males have a higher tendency to cause accidents. The ratio between males and females in accidents is slightly above 1.3.
+
+### 3. Variance (Number of Accidents Per Month)
 
 ```{r}
-# Variance (Number of Accidents Per Month)
 
 # Accidents per day
 
@@ -150,11 +167,12 @@ ggplot(data = Accidents_by_month, mapping = aes(x = month, y = accidents_num)) +
 
 ```
 
-#### Throughout the year, there were at least 150 accidents every month. February was the month with the least number of accidents, a reason for this is February 2017 had only 28 days. On the other hand, November had the most accidents (234). Towards the end of the year in Leeds the number of accidents increase.
+#### Throughout the year, there were at least 150 accidents every month. February was the month with the least number of accidents, a reason for this is that February 2017 had only 28 days. On the other hand, November had the highest number of accidents (234). Towards the end of the year, the number of accidents in Leeds  increases.
 
+### 4. Variance (Road Surface)
 
 ```{r}
-# Variance (Road Surface)
+
 ggplot(data = Accidents_2017) +
   geom_bar(mapping = aes(x = Road_Surface,fill = Road_Surface))
 
@@ -163,12 +181,12 @@ Accidents_2017 %>%
   summarise(count = n())
 ```
 
-#### Most accidents happen when the road is dry which is expected as drivers take more care when the road is bad. On average, Leeds has 175.4 rainfall days and 10.6 snowfalls days per year so for the remaining days the road is dry. Thus number of accidents per day for each climate is 2.97 when it is raining, 3.3 when it is snowing and 9.2 when the climate is dry. The number of accidents per day when the weather is dry is extremely highly and shows how careless Leeds' drivers are the road surface is dry.
+#### Most accidents happen when the road is dry, which is expected as drivers take more care when the road is bad. On average, Leeds has 175.4 rainfall days and 10.6 snowfalls days per year so for the remaining days the road is dry. Thus, number of accidents per day for each climate is 2.97 when it is raining, 3.3 when it is snowing and 9.2 when the climate is dry. The number of accidents per day when the weather is dry is extremely high, and this shows how careless Leeds' drivers are when the road surface is dry.
 
-
+### 5. Variance (Time)
 
 ```{r}
-# Variance (Time)
+
 ggplot(Accidents_2017,mapping=aes(x=Time))+
   geom_histogram(binwidth = 2000)+
   ggtitle("Accidents against Time")+
@@ -177,13 +195,13 @@ ggplot(Accidents_2017,mapping=aes(x=Time))+
 
 ```
 
-#### From 12 am till 6 am the number of accidents is remarkably low. After 6 am the number of accidents keeps increasing till 5.30 pm. After that the number of accidents keep decreasing. It is noteworthy to mention that there are 2 big drops in the number of accidents which  could represent something. 
+#### From 12 am till 6 am the number of accidents is remarkably low. After 6 am, the number of accidents keeps increasing till 5.30 pm. After that, the number of accidents keep decreasing. It is noteworthy to mention that there are 2 big drops in the number of accidents which could represent something. 
 
 ## Covariance
 
-```{r}
+### 1. Covariance (Age against Count, Classified by Gender)
 
-# Covariance (Age against Count, Classified by Gender)
+```{r}
 
 Accidents_2017 %>%
   group_by(Gender, Age) %>%
@@ -201,12 +219,12 @@ Accidents_2017 %>%
 
 ```
 
-#### For females as the age increase the count increases. The count peaks around the mid-20s,then the count declines gradually. The males' graph has a similar shape as females'. The only differences is that the males' graph has a higher peak and the drops sharper. 
+#### For females, as the age increases the count increases. The count peaks around the mid-20s,then the count declines gradually. The males' graph has a similar shape as females'. The only difference is that the males' graph has a higher peak and the drop is sharper. 
 
-
+### 2. Covariance (Time and Severity)
 
 ```{r}
-# Covariance (Time and Severity)
+
 ggplot(data = Accidents_2017)+ 
   geom_boxplot(mapping = aes(x = reorder(Severity, Time, FUN = median), y = Time))+ coord_flip()+
   ggtitle("Severity against Time")+
@@ -214,10 +232,12 @@ ggplot(data = Accidents_2017)+
   xlab("Time")
 ```
 
-#### Most serious and slight accidents happen between 10 am and 5.30 pm. While most fatal accidents occur between 4 pm and 8 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter=quartile range.   
+#### Most serious and slight accidents happen between 10 am and 5.30 pm. In the other hand, most fatal accidents occur between 4 pm and 8 pm. Serious accidents have the widest inter-quartile range while fatal accidents have the smallest inter-quartile range.   
+
+### 3. Covariance (Age and Severity)
 
 ```{r}
-# Covariance(Age and Severity)
+
 ggplot(data = Accidents_2017)+ 
   geom_boxplot(mapping = aes(x = reorder(Severity, Age, FUN = median), y = Age))+ coord_flip()+
   ggtitle("Severity against Age")+
@@ -227,10 +247,9 @@ ggplot(data = Accidents_2017)+
 
 #### Fatal accidents tend to happen to people under the age of 25 more frequently. Slight accidents have a few outliers. Serious accidents have the widest inter-quartile range.
 
-
+### 3. Covariance (Age against Count, Classified by Casualty Class)
 
 ```{r}
-# Covariance (Age against Count, Classified by Casualty Class)
 
 Accidents_2017 %>%
   group_by(Casualty_Class, Age) %>%
@@ -253,7 +272,7 @@ Accidents_2017 %>%
   summarise(Count = n() )
 
 ```
-#### When the casualty is a driver or rider, as the age increase till the mid-30s the count rockects,then the count falls rapidly. The plots for pedestrains and passengers are very similar,the only disparity is that the passengers have a higher peak. It should be highlighted that the number of casualties between the age 20 till mid-50s is awfully high when the casualty is a driver or rider compared to other casualty classes. Moreover, in the pedestrains' and passengers plots, teenagers have the higher number of casaulties than other age groups. Lastly, the number of infants and children casualties is dreadfully high when they are passengers in comparison to other casualty classes.
+#### When the casualty is a driver or rider, as the age increases till the mid-30s the count increases rapidly, then the count falls again. The plots for pedestrains and passengers are very similar. The only disparity is that the passengers have a higher peak. It should be highlighted that the number of casualties between the age 20 till mid-50s is awfully high when the casualty is a driver or rider compared to other casualty classes. Moreover, in the pedestrains' and passengers' plots, teenagers have a higher number of casaulties than other age groups. Finally, the number of infants and children casualties is dreadfully high when they are passengers in comparison to other casualty classes.
 
 ## Extra Plot: 
 
@@ -284,18 +303,3 @@ leaflet(data = long_lat_FULL)%>%
 ```
  
 #### The map divides the locations where the accidents took place into clusters, which helps knowing where the highest number of accidents took place. Also, the map classifies each accident on the map based on the severity. 
-
-# Questions
-
-1. What are the worst conditions to drive in ?
-2. What season has the most accidents ?
-3. What is the worst time to drive at ?
-4. Which area in Leeds has the most accidents ?
-5. Which roads are the most dangerous ?
-6. What are the age distributions for the casualty classes ?
-7. What characteristics increase the possibility of an accident ?
-8. Does the location or road influences the nature of an accident ?
-9. Why does the number of accidents increase towards the end of the year ?
-10. What do the 2 drops in the Accidents against Time graph represent ?
-11. Do accidents increase in the holidays ?
-
